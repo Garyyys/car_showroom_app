@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  database:
+    image: postgres:latest
+    container_name: db_car_sr
+    env_file: .env.db
+    volumes:
+      - pg_data:/var/lib/posgresql/data
+    ports:
+      - '127.0.0.1:5432:5432'
+    restart: unless-stopped
+
+  djnago_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8081
+    env_file: .env.app
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./:/app/
+    ports:
+      - '127.0.0.1:8081:8081'
+
+
+volumes:
+  pg_data:
+    driver: local
