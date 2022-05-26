@@ -7,7 +7,7 @@ from core.abstractmodels.common_info import Information
 from core.filters_models.decimal_range_field import DecimalRangeField
 
 
-class Showroom(DateAddedUpdated, Information, models.Model):
+class Showroom(DateAddedUpdated, Information):
     specification = models.JSONField(encoder=None, decoder=None)
     cars = models.ManyToManyField('dealer.Car', through='ShowroomCarForSale')
 
@@ -27,7 +27,7 @@ class ShowroomCarForSale(models.Model):
         return template.format(self)
 
 
-class DiscountShowroom(DateAddedUpdated, Discount, models.Model):
+class DiscountShowroom(DateAddedUpdated, Discount):
     id_showroom = models.ForeignKey(Showroom, on_delete=models.PROTECT, related_name="discount_id_showroom")
     id_car = models.ForeignKey('dealer.Car', on_delete=models.PROTECT, related_name="discount_showrooms_id_car")
 

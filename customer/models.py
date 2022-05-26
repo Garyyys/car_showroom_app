@@ -6,7 +6,7 @@ from core.abstractmodels.date_fields import DateAddedUpdated, DateUpdatedAdded
 from core.abstractmodels.common_info import Information
 
 
-class Customer(DateUpdatedAdded, Information, models.Model):
+class Customer(DateUpdatedAdded, Information):
     age = models.IntegerField(validators=[MinValueValidator(14), MaxValueValidator(150)])
     sex = models.CharField(max_length=6)
     driver_licence = models.BooleanField(default=True)
@@ -16,7 +16,7 @@ class Customer(DateUpdatedAdded, Information, models.Model):
         return template.format(self)
 
 
-class CustomerOrder(DateAddedUpdated, models.Model):
+class CustomerOrder(DateAddedUpdated):
     id_buyer = models.ForeignKey(Customer, on_delete=models.PROTECT, related_name="order_id_buyers")
     id_car = models.ForeignKey('dealer.Car', on_delete=models.PROTECT, related_name="order_id_car")
     price = DecimalRangeField(max_digits=20, decimal_places=2, min_value=0.00)

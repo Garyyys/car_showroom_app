@@ -7,7 +7,7 @@ from core.abstractmodels.discount import Discount
 from core.filters_models.decimal_range_field import DecimalRangeField
 
 
-class Dealer(DateAddedUpdated, Information, models.Model):
+class Dealer(DateAddedUpdated, Information):
     found_year = models.DateField()
     description = models.TextField(null=True)
     number_of_buyers = models.PositiveIntegerField(default=0)
@@ -19,7 +19,7 @@ class Dealer(DateAddedUpdated, Information, models.Model):
         return template.format(self)
 
 
-class Car(DateUpdatedAdded, models.Model):
+class Car(DateUpdatedAdded):
     make = models.CharField(max_length=20)
     model = models.CharField(max_length=30)
     color = models.CharField(max_length=30)
@@ -43,7 +43,7 @@ class DealerCarForSale(models.Model):
         return template.format(self)
 
 
-class DiscountDealer(DateAddedUpdated, Discount, models.Model):
+class DiscountDealer(DateAddedUpdated, Discount):
     id_supplier = models.ForeignKey('customer.Customer', on_delete=models.PROTECT, related_name="discount_id_dealer")
     id_car = models.ForeignKey(Car, on_delete=models.PROTECT, related_name="discount_dealer_id_car")
 
