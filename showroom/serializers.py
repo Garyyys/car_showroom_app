@@ -14,7 +14,7 @@ class ShowroomModel:
 
 class ShowRoomSerializer(serializers.ModelSerializer):
     name = serializers.CharField(max_length=100)
-    balance = DecimalField(max_digits=20, decimal_places=2, min_value=0.00)
+    balance = DecimalField()
     email = serializers.CharField(max_length=100)
 
 

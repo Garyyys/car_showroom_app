@@ -39,7 +39,7 @@ class DealerCarForSale(models.Model):
     price = DecimalRangeField(max_digits=20, decimal_places=2, min_value=3000)
 
     def __str__(self):
-        template = '{0.supplier} {0.car} {0.price}'
+        template = '{0.dealer} {0.car} {0.price}'
         return template.format(self)
 
 

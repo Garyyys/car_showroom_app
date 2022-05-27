@@ -12,7 +12,7 @@ class Customer(DateUpdatedAdded, Information):
     driver_licence = models.BooleanField(default=True)
 
     def __str__(self):
-        template = '{0.name} {0.surname} {0.age} {0.country} {0.email}'
+        template = '{0.name} {0.age} {0.sex} {0.country} {0.email}'
         return template.format(self)
 
 
