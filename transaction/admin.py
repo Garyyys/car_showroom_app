@@ -1,3 +1,14 @@
 from django.contrib import admin
+from .models import *
 
-# Register your models here.
+
+@admin.register(SalesShowroomToCustomer)
+class SalesShowroomsBuyersAdmin(admin.ModelAdmin):
+    readonly_fields = ("added_date",)
+    list_filter = ("price", "amount_of_discount", "added_date")
+
+
+@admin.register(SalesDealerToShowroom)
+class SalesSuppliersShowroomsAdmin(admin.ModelAdmin):
+    readonly_fields = ("added_date",)
+    list_filter = ("price", "amount_of_discount", "added_date")

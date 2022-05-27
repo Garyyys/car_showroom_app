@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from rest_framework import generics
+from .models import Showroom
+from .serializers import ShowRoomSerializer
 
-# Create your views here.
+
+class ShowRoomAPIView(generics.ListAPIView):
+    queryset = Showroom.objects.all()
+    serializer_class = ShowRoomSerializer

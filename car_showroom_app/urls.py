@@ -17,10 +17,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 
-
+from showroom.views import ShowRoomAPIView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include('customer.urls')),
+    path('api/', include('showroom.urls')),
+    path('api/', include('dealer.urls')),
+    path('api/', include('dealer.urls')),
 ]
 
 
