@@ -21,10 +21,10 @@ from showroom.views import ShowRoomAPIView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('customer.urls'), name='customers'),
-    path('api/', include('showroom.urls'), name=''),
-    path('api/', include('dealer.urls'), name=''),
-    path('api/', include('dealer.urls'), name=''),
+    path('api/', include('customer.urls')),
+    path('api/', include('showroom.urls')),
+    path('api/', include('dealer.urls')),
+    path('api/', include('dealer.urls')),
 ]
 
 
