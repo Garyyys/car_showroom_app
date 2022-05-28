@@ -21,7 +21,7 @@ class SalesShowroomToCustomer(DateAdded, models.Model):
 
 class SalesDealerToShowroom(DateAdded, models.Model):
     id_showroom = models.ForeignKey('showroom.Showroom', on_delete=models.PROTECT, related_name="sales_id_showroom")
-    id_supplier = models.ForeignKey('customer.Customer', on_delete=models.PROTECT, related_name="sales_id_dealer")
+    id_supplier = models.ForeignKey('dealer.Dealer', on_delete=models.PROTECT, related_name="sales_id_dealer")
     id_car = models.ForeignKey('dealer.Dealer', on_delete=models.PROTECT, related_name="sales_showroom_id_car")
     price = DecimalRangeField(max_digits=20, decimal_places=2, min_value=0.00)
     amount_of_discount = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(30)])
