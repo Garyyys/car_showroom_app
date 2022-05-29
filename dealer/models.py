@@ -44,7 +44,7 @@ class DealerCarForSale(models.Model):
 
 
 class DiscountDealer(DateAddedUpdated, Discount):
-    id_supplier = models.ForeignKey('customer.Customer', on_delete=models.PROTECT, related_name="discount_id_dealer")
+    id_supplier = models.ForeignKey('Dealer', on_delete=models.PROTECT, related_name="discount_id_dealer")
     id_car = models.ForeignKey(Car, on_delete=models.PROTECT, related_name="discount_dealer_id_car")
 
     def __str__(self):

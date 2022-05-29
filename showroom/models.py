@@ -1,6 +1,4 @@
-from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-from django_countries.fields import CountryField
 from core.abstractmodels.date_fields import DateAddedUpdated, DateAdded
 from core.abstractmodels.discount import Discount
 from core.abstractmodels.common_info import Information
