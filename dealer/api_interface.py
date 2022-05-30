@@ -1,4 +1,6 @@
-from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, permissions, status, mixins
+from rest_framework.viewsets import GenericViewSet
+
 from .models import DealerCarForSale, Car
 from .serializers import DealerCarForSaleSerializer, CarSerializer
 from .filters import DealerFilter, CarFilter
@@ -10,7 +12,7 @@ class DealerViewSet(viewsets.ModelViewSet):
     """
 
     queryset = DealerCarForSale.objects.all()
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
     serializer_class = DealerCarForSaleSerializer
     filterset_class = DealerFilter
 
