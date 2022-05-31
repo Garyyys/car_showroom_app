@@ -35,4 +35,4 @@ class CarFilter(filters.FilterSet):
 
     class Meta:
         model = Car
-        fields = ('make', 'model', 'color', 'year', 'engine', 'body_type', 'added_date', 'date_updated')
+        fields = ('make', 'model', 'color', 'year', 'engine', 'body_type', 'added_date')
