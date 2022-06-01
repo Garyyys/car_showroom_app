@@ -10,6 +10,6 @@ class ShowroomsViewSet(viewsets.ModelViewSet):
     """
 
     queryset = ShowroomCarForSale.objects.all()
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
     serializer_class = ShowroomCarForSaleSerializer
     filterset_class = ShowroomsFilter

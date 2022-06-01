@@ -5,7 +5,7 @@ from .api_interface import DealerViewSet, CarViewSet
 router = routers.DefaultRouter()
 router.register(r'dealer', DealerViewSet)
 router.register(r'car', CarViewSet)
-
+print('ROUTS!!!', router.urls)
 urlpatterns = [
     path('', include(router.urls))
 ]

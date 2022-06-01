@@ -8,15 +8,16 @@ class ShowroomSerializer(CountryFieldMixin, serializers.ModelSerializer):
     class Meta:
         model = Showroom
         fields = '__all__'
-
+        depth = 1
 
 class ShowroomCarForSaleSerializer(serializers.ModelSerializer):
-    car = CarSerializer(read_only=True)
+    cars = CarSerializer(read_only=True)
     showroom = ShowroomSerializer(read_only=True)
 
     class Meta:
         model = ShowroomCarForSale
-        fields = '__all__'
+        exclude = ['car']
+        # fields = '__all__'
 
 
 class DiscountShowroomSerializer(serializers.ModelSerializer):

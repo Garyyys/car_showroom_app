@@ -6,7 +6,7 @@ router = routers.DefaultRouter()
 router.register(r'customer', CustomerViewSet)
 
 
-print('ROUTS!!!', router.urls)
+# print('ROUTS!!!', router.urls)
 
 urlpatterns = [
     path('', include(router.urls)),

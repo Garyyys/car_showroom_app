@@ -19,7 +19,7 @@ class Showroom(DateAddedUpdated, Information):
     cars = models.ManyToManyField('dealer.Car', through='ShowroomCarForSale')
 
     def __str__(self):
-        template = '{0.name} {0.country} {0.email} {0.is_available} {0.unique_buyers}'
+        template = '{0.name} {0.country} {0.email} {0.is_available}'
         return template.format(self)
 
 
@@ -30,7 +30,7 @@ class ShowroomCarForSale(models.Model):
     price = DecimalRangeField(max_digits=20, decimal_places=2, min_value=0.00)
 
     def __str__(self):
-        template = '{0.showroom} {0.car} {0.cars_count} {0.price}'
+        template = '{0.showroom} {0.car} {0.total_car} {0.price}'
         return template.format(self)
 
 
