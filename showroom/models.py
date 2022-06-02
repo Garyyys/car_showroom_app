@@ -6,7 +6,16 @@ from core.filters_models.decimal_range_field import DecimalRangeField
 
 
 class Showroom(DateAddedUpdated, Information):
-    specification = models.JSONField(encoder=None, decoder=None)
+    specification = models.JSONField(encoder=None,
+                                     decoder=None,
+                                     default={
+                                         'make': 'audi',
+                                         'model': 'q7',
+                                         'color': 'red',
+                                         'year': '2010',
+                                         'engine': 7.0,
+                                         'body_type': 'sedan',
+                                     })
     cars = models.ManyToManyField('dealer.Car', through='ShowroomCarForSale')
 
     def __str__(self):
@@ -21,7 +30,7 @@ class ShowroomCarForSale(models.Model):
     price = DecimalRangeField(max_digits=20, decimal_places=2, min_value=0.00)
 
     def __str__(self):
-        template = '{0.showroom} {0.car} {0.cars_count} {0.price}'
+        template = '{0.showroom} {0.car} {0.total_car} {0.price}'
         return template.format(self)
 
 
