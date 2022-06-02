@@ -12,7 +12,14 @@ class SalesShowroomToCustomerFilter(filters.FilterSet):
 
     class Meta:
         model = SalesShowroomToCustomer
-        fields = ('id_buyer', 'id_showroom', 'id_car', 'price', 'amount_of_discount', 'added_date')
+        fields = (
+            "id_buyer",
+            "id_showroom",
+            "id_car",
+            "price",
+            "amount_of_discount",
+            "added_date",
+        )
 
 
 class SalesDealerToShowroomFilter(filters.FilterSet):
@@ -25,4 +32,11 @@ class SalesDealerToShowroomFilter(filters.FilterSet):
 
     class Meta:
         model = SalesDealerToShowroom
-        fields = ('id_dealer', 'id_showroom', 'id_car', 'price', 'amount_of_discount', 'added_date')
+        fields = (
+            "id_dealer",
+            "id_showroom",
+            "id_car",
+            "price",
+            "amount_of_discount",
+            "added_date",
+        )
