@@ -7,6 +7,7 @@ class DealerSerializer(CountryFieldMixin, serializers.ModelSerializer):
     class Meta:
         model = Dealer
         fields = '__all__'
+        depth = 1
 
 
 class CarSerializer(serializers.ModelSerializer):
@@ -18,6 +19,7 @@ class CarSerializer(serializers.ModelSerializer):
 class DealerCarForSaleSerializer(CountryFieldMixin, serializers.ModelSerializer):
     car = CarSerializer(read_only=True)
     supplier = DealerSerializer(read_only=True)
+
 
     class Meta:
         model = DealerCarForSale
