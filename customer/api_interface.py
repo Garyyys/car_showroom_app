@@ -2,6 +2,8 @@ from rest_framework import permissions, status, views, viewsets
 from rest_framework.decorators import action, permission_classes
 from rest_framework.response import Response
 
+from core.common_views.views import CustomViewSet
+
 from .filters import CustomerFilter
 from .models import Customer, CustomerOrder
 from .serializers import CustomerOrderSerializer, CustomerSerializer
@@ -79,3 +81,9 @@ class CustomerListAPIView(views.APIView):
         customer.delete()
 
         return Response({"post": "delete post " + str(pk)}, status=status.HTTP_200_OK)
+
+
+class CustomerOrderViewSet(CustomViewSet):
+
+    queryset = CustomerOrder.objects.all()
+    serializer_class = CustomerOrderSerializer
