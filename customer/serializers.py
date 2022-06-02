@@ -1,20 +1,22 @@
-from rest_framework import serializers
 from django_countries.serializers import CountryFieldMixin
+from rest_framework import serializers
+
 from dealer.serializers import CarSerializer
+
 from .models import *
 
 
-class CustomerSerializer(CountryFieldMixin, serializers.ModelSerializer):
-    class Meta:
-        model = Customer
-        fields = '__all__'
-
-
 class CustomerOrderSerializer(serializers.ModelSerializer):
-    id_car = CarSerializer(read_only=True)
-    id_buyer = CustomerSerializer(read_only=True)
+    car = CarSerializer(read_only=True)
 
     class Meta:
         model = CustomerOrder
-        fields = '__all__'
+        fields = ["is_available", "price", "car", "customer"]
 
+
+class CustomerSerializer(CountryFieldMixin, serializers.ModelSerializer):
+    customer_orders = CustomerOrderSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Customer
+        fields = ["name", "email", "balance", "country", "age", "sex", "driver_licence", "customer_orders"]
