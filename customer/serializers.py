@@ -7,17 +7,16 @@ from .models import *
 
 
 class CustomerOrderSerializer(serializers.ModelSerializer):
-    id_car = CarSerializer(read_only=True)
+    car = CarSerializer(read_only=True)
 
     class Meta:
         model = CustomerOrder
-        fields = "__all__"
-        depth = 1
+        fields = ["is_available", "price", "car", "customer"]
 
 
 class CustomerSerializer(CountryFieldMixin, serializers.ModelSerializer):
-    order_id_customers = CustomerOrderSerializer(read_only=True, many=True)
+    customer_orders = CustomerOrderSerializer(read_only=True, many=True)
 
     class Meta:
         model = Customer
-        fields = ["name", "email", "balance", "country", "age", "sex", "driver_licence" "order_id_customers"]
+        fields = ["name", "email", "balance", "country", "age", "sex", "driver_licence", "customer_orders"]

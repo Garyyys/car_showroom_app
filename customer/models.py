@@ -18,10 +18,10 @@ class Customer(DateUpdatedAdded, Information):
 
 
 class CustomerOrder(DateAddedUpdated):
-    id_customer = models.ForeignKey(Customer, on_delete=models.PROTECT, related_name="order_id_customers", null=True)
-    id_car = models.ForeignKey("dealer.Car", on_delete=models.PROTECT, related_name="order_id_car")
+    customer = models.ForeignKey(Customer, on_delete=models.PROTECT, related_name="customer_orders", null=True)
+    car = models.ForeignKey("dealer.Car", on_delete=models.PROTECT, related_name="ordered_car", null=True)
     price = DecimalRangeField(max_digits=20, decimal_places=2, min_value=0.00)
 
     def __str__(self):
-        template = "{0.id_customer} {0.id_car} {0.price} {0.is_available}"
+        template = "{0.customer} {0.car} {0.price} {0.is_available}"
         return template.format(self)

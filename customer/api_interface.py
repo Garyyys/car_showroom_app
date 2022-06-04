@@ -1,3 +1,4 @@
+from django.http import Http404
 from rest_framework import permissions, status, views, viewsets
 from rest_framework.decorators import action, permission_classes
 from rest_framework.response import Response
@@ -9,29 +10,29 @@ from .models import Customer, CustomerOrder
 from .serializers import CustomerOrderSerializer, CustomerSerializer
 
 
-class CustomerViewSet(viewsets.ModelViewSet):
-    """
-    A viewset for information about customers and theirs orders
-    """
-
-    queryset = CustomerOrder.objects.all()
-    permission_classes = [permissions.AllowAny]
-    serializer_class = CustomerOrderSerializer
-    filterset_class = CustomerFilter
-
-
 @permission_classes(
     [
         permissions.AllowAny,
     ]
 )
 class CustomerListAPIView(views.APIView):
-    def get(self, request):
+    def get_object(self, pk):
+        try:
+            return Customer.objects.get(pk=pk)
+        except Customer.DoesNotExist:
+            raise Http404
+
+    def get(self, request, **kwargs):
+        pk = kwargs.get("pk", None)
+        if pk:
+            customer = self.get_object(pk)
+            customer_data = CustomerSerializer(customer).data
+            return Response({"Customer details": customer_data}, status=status.HTTP_200_OK)
+
         queryset = Customer.objects.all()
-        return Response(
-            {"posts": CustomerSerializer(queryset, many=True).data},
-            status=status.HTTP_200_OK,
-        )
+        customers = CustomerSerializer(queryset, many=True)
+        data = customers.data
+        return Response({"posts": data}, status=status.HTTP_200_OK)
 
     def post(self, request):
         serializer = CustomerSerializer(data=request.data)
@@ -47,10 +48,9 @@ class CustomerListAPIView(views.APIView):
             driver_licence=request.data["driver_licence"],
         )
 
-        return Response(
-            {"post": CustomerSerializer(post_new).data},
-            status=status.HTTP_201_CREATED,
-        )
+        data = CustomerSerializer(post_new).data
+
+        return Response(data={"post": data}, status=status.HTTP_201_CREATED)
 
     def put(self, request, *args, **kwargs):
         pk = kwargs.get("pk", None)
@@ -84,6 +84,5 @@ class CustomerListAPIView(views.APIView):
 
 
 class CustomerOrderViewSet(CustomViewSet):
-
     queryset = CustomerOrder.objects.all()
     serializer_class = CustomerOrderSerializer

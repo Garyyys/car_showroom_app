@@ -1,15 +1,12 @@
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework import routers
-from .api_interface import CustomerViewSet, CustomerListAPIView
+from rest_framework.urlpatterns import format_suffix_patterns
 
-router = routers.DefaultRouter()
-router.register(r'customer', CustomerViewSet)
-
-
-# print('ROUTS!!!', router.urls)
+from .api_interface import CustomerListAPIView
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path('crlist/', CustomerListAPIView.as_view()),
-    path('crlist/<int:pk>', CustomerListAPIView.as_view()),
+    path("customer/", CustomerListAPIView.as_view()),
+    path("customer/<int:pk>", CustomerListAPIView.as_view()),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)

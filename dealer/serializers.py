@@ -1,32 +1,32 @@
-from rest_framework import serializers
 from django_countries.serializers import CountryFieldMixin
+from rest_framework import serializers
+
 from .models import *
-
-
-class DealerSerializer(CountryFieldMixin, serializers.ModelSerializer):
-    class Meta:
-        model = Dealer
-        fields = '__all__'
-        depth = 1
 
 
 class CarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Car
-        fields = '__all__'
+        fields = ["make", "model", "body_type", "color", "year", "engine"]
 
 
 class DealerCarForSaleSerializer(CountryFieldMixin, serializers.ModelSerializer):
-    car = CarSerializer(read_only=True)
-    supplier = DealerSerializer(read_only=True)
-
+    car = CarSerializer()
 
     class Meta:
         model = DealerCarForSale
-        fields = '__all__'
+        fields = ["car", "price"]
+
+
+class DealerSerializer(CountryFieldMixin, serializers.ModelSerializer):
+    dealers_cars = DealerCarForSaleSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Dealer
+        fields = ["name", "email", "found_year", "description", "dealers_cars"]
 
 
 class DiscountDealerSerializer(serializers.ModelSerializer):
     class Meta:
         model = DiscountDealer
-        fields = '__all__'
+        fields = "__all__"
