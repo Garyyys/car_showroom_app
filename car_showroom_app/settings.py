@@ -82,7 +82,7 @@ DATABASES = {
         "USER": environ.get("DATABASE_USER", "app"),
         "PASSWORD": environ.get("DATABASE_PASSWORD", 123),
         "HOST": environ.get("DATABASE_HOST", "127.0.0.1"),
-        "PORT": environ.get("DATABASE_PORT", 5432),
+        "PORT": environ.get("DATABASE_PORT", 5433),
     }
 }
 

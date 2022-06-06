@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import *
+from .models import Car, Dealer, DiscountDealer
 
 
 @admin.register(Dealer)
@@ -36,9 +36,9 @@ class CarAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(DealerCarForSale)
-class DealerCarsForSaleAdmin(admin.ModelAdmin):
-    pass
+# @admin.register(DealerCarForSale)
+# class DealerCarsForSaleAdmin(admin.ModelAdmin):
+#     pass
 
 
 @admin.register(DiscountDealer)

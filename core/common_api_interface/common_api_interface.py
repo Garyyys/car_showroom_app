@@ -1,5 +1,4 @@
-from rest_framework import status
-from rest_framework import viewsets
+from rest_framework import status, viewsets
 from rest_framework.response import Response
 
 
@@ -38,7 +37,7 @@ class CustomViewSet(viewsets.GenericViewSet):
 
     @property
     def paginator(self):
-        if not hasattr(self, '_paginator'):
+        if not hasattr(self, "_paginator"):
             if self.pagination_class is None:
                 self._paginator = None
             else:
@@ -53,4 +52,3 @@ class CustomViewSet(viewsets.GenericViewSet):
     def get_paginated_response(self, data):
         assert self.paginator is not None
         return self.paginator.get_paginated_response(data)
-

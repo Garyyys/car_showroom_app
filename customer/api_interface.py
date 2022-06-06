@@ -3,7 +3,7 @@ from rest_framework import permissions, status, views, viewsets
 from rest_framework.decorators import action, permission_classes
 from rest_framework.response import Response
 
-from core.common_views.views import CustomViewSet
+from core.common_api_interface.common_api_interface import CustomViewSet
 
 from .filters import CustomerFilter
 from .models import Customer, CustomerOrder
@@ -16,6 +16,7 @@ from .serializers import CustomerOrderSerializer, CustomerSerializer
     ]
 )
 class CustomerListAPIView(views.APIView):
+    # TODO: separeted endpoint for customer details
     def get_object(self, pk):
         try:
             return Customer.objects.get(pk=pk)
