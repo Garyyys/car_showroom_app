@@ -1,11 +1,13 @@
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework import routers
-from .api_interface import TransactionViewSet, DiscountViewSet
+
+from transaction.api_interface import (
+    TransactionDealerToShowroomViewSet,
+    TransactionShowroomToCustomerViewSet,
+)
 
 router = routers.DefaultRouter()
-router.register(r'transaction', TransactionViewSet, 'transaction')
-router.register(r'discount', DiscountViewSet, 'discount')
+router.register(r"transaction/showroom", TransactionShowroomToCustomerViewSet)
+router.register(r"transaction/dealer", TransactionDealerToShowroomViewSet)
 
-urlpatterns = [
-    path('', include(router.urls))
-]
+urlpatterns = [path("", include(router.urls))]

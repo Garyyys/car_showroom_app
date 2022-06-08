@@ -9,12 +9,12 @@ class CustomViewSet(viewsets.GenericViewSet):
         page = self.paginate_queryset(self.filter_queryset(self.queryset))
         if page is not None:
             serializer = self.serializer_class(page, many=True)
-            return Response(self.get_paginated_response(serializer.data), status=status.HTTP_200_OK)
+            return self.get_paginated_response(serializer.data)
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
 
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
