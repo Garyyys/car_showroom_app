@@ -16,11 +16,6 @@ class ShowroomAdmin(admin.ModelAdmin):
     )
 
 
-# @admin.register(ShowroomCarForSale)
-# class ShowroomCarForSaleAdmin(admin.ModelAdmin):
-#     pass
-
-
 @admin.register(DiscountShowroom)
 class DiscountShowroomsAdmin(admin.ModelAdmin):
     readonly_fields = (

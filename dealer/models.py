@@ -11,7 +11,6 @@ class Dealer(DateAddedUpdated, Information):
     found_year = models.DateField()
     description = models.TextField(null=True)
     number_of_buyers = models.PositiveIntegerField(default=0)
-    # cars = models.ManyToManyField("Car", through="DealerCarForSale")
 
     def __str__(self):
         template = "{0.name} {0.country} {0.email}" "{0.number_of_buyers} {0.is_available}"
@@ -35,27 +34,24 @@ class Car(DateUpdatedAdded):
     engine = DecimalRangeField(max_digits=3, decimal_places=1, min_value=0.6, max_value=9.0)
     body_type = models.CharField(max_length=100, choices=CHOICES)
     price = models.DecimalField(max_digits=9, decimal_places=2, null=True)
-    showroom = models.ForeignKey("showroom.Showroom", null=True, blank=True, on_delete=models.SET_NULL)
-    dealer = models.ForeignKey("Dealer", null=True, blank=True, on_delete=models.SET_NULL)
+    showroom = models.ForeignKey(
+        "showroom.Showroom", null=True, blank=True, on_delete=models.SET_NULL, related_name="showrooms_cars"
+    )
+    dealer = models.ForeignKey("Dealer", null=True, blank=True, on_delete=models.PROTECT, related_name="dealers_cars")
+    customer = models.ForeignKey(
+        "customer.Customer", null=True, blank=True, on_delete=models.SET_NULL, related_name="customers_cars"
+    )
 
     def __str__(self):
-        template = "{0.make} {0.model} {0.color} {0.year} {0.engine}" "{0.body_type}"
+        template = (
+            "{0.make} {0.model} {0.color} {0.year} {0.engine}" "{0.body_type} {0.price}" " {0.showroom} {0.customer}"
+        )
         return template.format(self)
-
-
-# class DealerCarForSale(models.Model):
-#     car = models.ForeignKey(Car, on_delete=models.CASCADE)
-#     dealer = models.ForeignKey(Dealer, on_delete=models.CASCADE, related_name="dealers_cars")
-#     price = DecimalRangeField(max_digits=20, decimal_places=2, min_value=3000)
-#
-#     def __str__(self):
-#         template = "{0.dealer} {0.car} {0.price}"
-#         return template.format(self)
 
 
 class DiscountDealer(DateAddedUpdated, Discount):
     dealer = models.ForeignKey("Dealer", on_delete=models.PROTECT, related_name="dealer_discount", null=True)
-    dealer_car = models.ForeignKey(Car, on_delete=models.PROTECT, related_name="dealer_cat", null=True)
+    dealer_car = models.ForeignKey(Car, on_delete=models.PROTECT, related_name="dealer_car", null=True)
 
     def __str__(self):
         template = "{0.dealer} {0.start_time} {0.end_time} {0.dealer_car}" "{0.amount_of_discount} {0.is_available}"

@@ -1,4 +1,3 @@
-from django_filters import rest_framework as filters
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action, permission_classes
 from rest_framework.permissions import AllowAny
@@ -33,10 +32,7 @@ class DealerViewSet(CustomViewSet):
     def detail_of_dealer(self, request, pk):
         dealer_detail = Dealer.objects.get(pk=pk)
         data = DealerSerializer(dealer_detail).data
-        return Response(
-            {"dealer details": data},
-            status=status.HTTP_200_OK,
-        )
+        return Response({"dealer details": data}, status=status.HTTP_200_OK)
 
     @action(methods=["post"], url_path="create", detail=False)
     def create_dealer(self, request):

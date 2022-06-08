@@ -6,22 +6,21 @@ from core.filters_models.decimal_range_field import DecimalRangeField
 
 
 class SalesShowroomToCustomer(DateAdded, models.Model):
-    showroom = models.ForeignKey(
-        "showroom.Showroom", on_delete=models.PROTECT, related_name="showroom_that_sells", null=True
-    )
+    showroom = models.ForeignKey("showroom.Showroom", on_delete=models.PROTECT, related_name="showroom", null=True)
     customer = models.ForeignKey(
-        "customer.Customer", on_delete=models.PROTECT, related_name="customer_that_buys", null=True
+        "customer.Customer", on_delete=models.PROTECT, related_name="customer_transaction_history", null=True
     )
-    car = models.ForeignKey("dealer.Car", on_delete=models.PROTECT, related_name="car_for_buy", null=True)
+    car = models.ForeignKey("dealer.Car", on_delete=models.PROTECT, related_name="sold_car", null=True)
     price = DecimalRangeField(max_digits=20, decimal_places=2, min_value=0.00)
     amount_of_discount = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(30)])
 
     def __str__(self):
-        template = "{0.id_showroom} {0.id_buyer} {0.id_car}" "{0.price} {0.amount_of_discount} {0.added_date}"
+        template = "{0.showroom} {0.customer} {0.car} {0.price} {0.amount_of_discount} {0.added_date}"
         return template.format(self)
 
 
 class SalesDealerToShowroom(DateAdded, models.Model):
+
     showroom = models.ForeignKey(
         "showroom.Showroom", on_delete=models.PROTECT, related_name="showroom_that_buys", null=True
     )

@@ -1,4 +1,3 @@
-from django.db.models import Count
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
@@ -7,30 +6,30 @@ from rest_framework.response import Response
 from core.common_api_interface.common_api_interface import CustomViewSet
 
 from .models import Showroom
-from .serializers import ShowroomSerializer
+from .serializers import MainShowroomSerializer
 
 
 class ShowroomsViewSet(CustomViewSet):
     queryset = Showroom.objects.all()
-    serializer_class = ShowroomSerializer()
+    serializer_class = MainShowroomSerializer()
 
     # filterset_class = ShowroomFilter
 
     @action(methods=["get"], detail=False, url_path="list")
     def list_of_showrooms(self, request):
         showrooms = Showroom.objects.all()
-        data = ShowroomSerializer(showrooms, many=True).data
-        return Response({"Showrooms": data})
+        data = MainShowroomSerializer(showrooms, many=True).data
+        return Response({"List of transactions: Showroom to customer": data})
 
     @action(methods=["get"], detail=True, url_path="details")
     def detail_of_showroom(self, request, pk):
-        dealer_detail = Showroom.objects.get(pk=pk)
-        data = ShowroomSerializer(dealer_detail).data
+        showroom_detail = Showroom.objects.get(pk=pk)
+        data = MainShowroomSerializer(showroom_detail).data
         return Response({"Showroom details": data}, status=status.HTTP_200_OK)
 
     @action(methods=["post"], url_path="create", detail=False)
     def create_showroom(self, request):
-        dealer_serializer = ShowroomSerializer(data=request.data)
+        dealer_serializer = MainShowroomSerializer(data=request.data)
         dealer_serializer.is_valid(raise_exception=True)
         dealer_serializer.save()
         data = dealer_serializer.data
