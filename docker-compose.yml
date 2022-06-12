@@ -11,7 +11,7 @@ services:
       - '5433:5432'
     restart: unless-stopped
 
-  djnago_server:
+  django_server:
     build:
       context: .
       dockerfile: Dockerfile
@@ -22,7 +22,7 @@ services:
     volumes:
       - ./:/app/
     ports:
-      - '127.0.0.1:8081:8081'
+      - '8081:8081'
 
 
 volumes:

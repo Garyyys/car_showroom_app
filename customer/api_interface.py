@@ -11,7 +11,6 @@ from .serializers import CustomerOrderSerializer, CustomerSerializer
 class CustomerListAPIView(views.APIView):
     queryset = Customer.objects.all()
 
-    @action(methods=["get"], detail=False, url_path="list")
     def get(self, request, **kwargs):
         queryset = Customer.objects.all()
         customers = CustomerSerializer(queryset, many=True)

@@ -23,11 +23,7 @@ class TransactionShowroomToCustomerViewSet(CustomViewSet):
     @action(methods=["get"], detail=False, url_path="history")
     def list_of_transactions(self, request):
         """Return transactions list from Showroom to customers"""
-        transactions = SalesShowroomToCustomer.objects.all()
-        data = SalesShowroomToBuyersSerializer(transactions, many=True).data
-        return Response(
-            {"All showrooms transactions history": data}, status=status.HTTP_200_OK
-        )
+        return super(TransactionShowroomToCustomerViewSet, self).get(request)
 
     @action(methods=["get"], detail=True, url_path="details")
     def details_of_transaction(self, request, pk):
@@ -41,14 +37,12 @@ class TransactionShowroomToCustomerViewSet(CustomViewSet):
 
 class TransactionDealerToShowroomViewSet(CustomViewSet):
     queryset = SalesDealerToShowroom.objects.all()
-    serializer_class = SalesShowroomToBuyersSerializer()
+    serializer_class = SalesShowroomToBuyersSerializer
 
     @action(methods=["get"], detail=False, url_path="history")
     def list_of_transactions(self, request):
         """Return transactions list from Dealer to Showroom"""
-        transactions = SalesDealerToShowroom.objects.all()
-        data = SalesDealerToShowroomSerializer(transactions, many=True).data
-        return Response({"All dealers transactions": data})
+        return super(TransactionDealerToShowroomViewSet, self).get(request)
 
     @action(methods=["get"], detail=True, url_path="details")
     def details_of_transaction(self, request, pk):
@@ -64,18 +58,3 @@ class DiscountViewSet(CustomViewSet):
     """
     A viewset for discounts of showrooms and suppliers
     """
-
-    def list(self, request, *args):
-        discounts_showrooms = DiscountShowroom.objects.all()
-        discounts_dealer = DiscountDealer.objects.all()
-        serializer_discounts_showrooms = DiscountShowroomSerializer(
-            discounts_showrooms, many=True
-        )
-        serializer_discounts_dealer = DiscountDealerSerializer(
-            discounts_dealer, many=True
-        )
-        serializer_dict = {
-            "discounts_showrooms": serializer_discounts_showrooms.data,
-            "discounts_dealer": serializer_discounts_dealer.data,
-        }
-        return Response(serializer_dict, status=status.HTTP_200_OK)

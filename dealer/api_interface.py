@@ -1,3 +1,5 @@
+from rest_framework.filters import SearchFilter, OrderingFilter
+
 from core.common_api_interface.common_api_interface import CustomViewSet
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action, permission_classes
@@ -19,13 +21,12 @@ class DealerViewSet(CustomViewSet):
     # TODO: add permissions and filter sets
     queryset = Dealer.objects.all()
     serializer_class = DealerSerializer
-    filterset_class = DealerFilter
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('name',)
 
     @action(methods=["get"], detail=False, url_path="list")
     def list_of_dealers(self, request):
-        dealers = Dealer.objects.all()
-        data = DealerSerializer(dealers, many=True).data
-        return Response({"dealers": data})
+        return super(DealerViewSet, self).get(request)
 
     @action(methods=["get"], detail=True, url_path="details")
     def detail_of_dealer(self, request, pk):
@@ -35,11 +36,7 @@ class DealerViewSet(CustomViewSet):
 
     @action(methods=["post"], url_path="create", detail=False)
     def create_dealer(self, request):
-        dealer_serializer = DealerSerializer(data=request.data)
-        dealer_serializer.is_valid(raise_exception=True)
-        dealer_serializer.save()
-        data = dealer_serializer.data
-        return Response({"New dealer detail": data}, status=status.HTTP_201_CREATED)
+        return super(DealerViewSet, self).post(request)
 
     @action(
         detail=True,

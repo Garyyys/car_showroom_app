@@ -32,6 +32,8 @@ class CustomerSerializer(CountryFieldMixin, serializers.ModelSerializer):
 
 
 class CustomerShortInfoSerializer(CountryFieldMixin, serializers.ModelSerializer):
+    number_of_purchases = serializers.IntegerField()
+
     class Meta:
         model = Customer
-        fields = ["name", "email", "country", "age", "sex"]
+        fields = ["name", "number_of_purchases"]
