@@ -29,12 +29,14 @@ class SalesShowroomToCustomer(DateAdded, models.Model):
         db_table = "sales_showroom_to_customer"
 
     def __str__(self):
-        template = "{0.showroom} {0.customer} {0.car} {0.price} {0.amount_of_discount} {0.added_date}"
+        template = (
+            "{0.showroom} {0.customer} {0.car} {0.price}"
+            " {0.amount_of_discount} {0.added_date}"
+        )
         return template.format(self)
 
 
 class SalesDealerToShowroom(DateAdded, models.Model):
-
     showroom = models.ForeignKey(
         "showroom.Showroom",
         on_delete=models.PROTECT,

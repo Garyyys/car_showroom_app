@@ -2,7 +2,7 @@ from django.db import models
 
 
 class DateAddedUpdated(models.Model):
-    is_available = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
     added_date = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 

@@ -1,9 +1,9 @@
-from rest_framework.filters import SearchFilter, OrderingFilter
-
 from core.common_api_interface.common_api_interface import CustomViewSet
+from core.permissions.permissions import IsDealerUser, IsShowroomUser
 from rest_framework import permissions, status, viewsets
-from rest_framework.decorators import action, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.decorators import action
+from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
 from .filters import CarFilter, DealerFilter
@@ -12,7 +12,6 @@ from .serializers import CarSerializer, DealerSerializer
 
 
 # TODO: make permissions
-@permission_classes([permissions.AllowAny])
 class DealerViewSet(CustomViewSet):
     """
     A viewset for information about suppliers and theirs cars
@@ -21,8 +20,9 @@ class DealerViewSet(CustomViewSet):
     # TODO: add permissions and filter sets
     queryset = Dealer.objects.all()
     serializer_class = DealerSerializer
+    permission_classes = [IsAdminUser, IsDealerUser]
     filter_backends = (SearchFilter, OrderingFilter)
-    search_fields = ('name',)
+    search_fields = ("name",)
 
     @action(methods=["get"], detail=False, url_path="list")
     def list_of_dealers(self, request):
@@ -38,22 +38,7 @@ class DealerViewSet(CustomViewSet):
     def create_dealer(self, request):
         return super(DealerViewSet, self).post(request)
 
-    @action(
-        detail=True,
-        methods=["delete"],
-        permission_classes=[AllowAny],
-        url_path="delete",
-    )
+    # TODO: remake function, do not delete instance, change is_active field to False
+    @action(detail=True, methods=["delete"], url_path="delete")
     def delete(self, request, pk):
         return super(DealerViewSet, self).delete(request, pk)
-
-
-class CarViewSet(viewsets.ModelViewSet):
-    """
-    A viewset for information about cars
-    """
-
-    queryset = Car.objects.all()
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = CarSerializer
-    filterset_class = CarFilter

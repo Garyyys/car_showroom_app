@@ -1,4 +1,5 @@
 from core.common_api_interface.common_api_interface import CustomViewSet
+from core.permissions.permissions import IsCustomerUser
 from rest_framework import permissions, status, views
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
@@ -7,7 +8,7 @@ from .models import Customer, CustomerOrder
 from .serializers import CustomerOrderSerializer, CustomerSerializer
 
 
-@permission_classes([permissions.AllowAny])
+@permission_classes([IsCustomerUser, permissions.IsAdminUser])
 class CustomerListAPIView(views.APIView):
     queryset = Customer.objects.all()
 
@@ -66,6 +67,7 @@ class CustomerListAPIView(views.APIView):
         return Response({"post": "delete post " + str(pk)}, status=status.HTTP_200_OK)
 
 
+@permission_classes([permissions.IsAdminUser, IsCustomerUser])
 @api_view(["GET"])
 def get_details(request, pk):
     customer = Customer.objects.get(pk=pk)
