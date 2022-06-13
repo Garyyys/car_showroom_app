@@ -19,6 +19,9 @@ class Showroom(DateAddedUpdated, Information):
         },
     )
 
+    class Meta:
+        db_table = "showroom"
+
     def __str__(self):
         template = "{0.name} {0.country} {0.email} {0.is_available}"
         return template.format(self)
@@ -26,14 +29,20 @@ class Showroom(DateAddedUpdated, Information):
 
 class DiscountShowroom(DateAddedUpdated, Discount):
     showrooms_discount = models.ForeignKey(
-        Showroom, on_delete=models.PROTECT, related_name="showrooms_discount", null=True
+        Showroom,
+        on_delete=models.PROTECT,
+        related_name="showroom_with_discount",
+        null=True,
     )
     discount_showroom_for_car = models.ForeignKey(
         "dealer.Car",
         on_delete=models.PROTECT,
-        related_name="discount_showroom_for_car",
+        related_name="showroom_car_on_sale",
         null=True,
     )
+
+    class Meta:
+        db_table = "showroom_discount"
 
     def __str__(self):
         template = (

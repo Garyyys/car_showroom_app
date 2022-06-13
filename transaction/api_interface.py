@@ -25,7 +25,18 @@ class TransactionShowroomToCustomerViewSet(CustomViewSet):
         """Return transactions list from Showroom to customers"""
         return super(TransactionShowroomToCustomerViewSet, self).get(request)
 
-    @action(methods=["get"], detail=True, url_path="details")
+    @action(methods=["get"], detail=True, url_path="showroom-details")
+    def showroom_to_customer_transaction_history(self, request, pk):
+        showroom_transaction = SalesShowroomToCustomer.objects.filter(showroom=pk)
+        serializer_data = SalesShowroomToBuyersSerializer(
+            showroom_transaction, many=True
+        ).data
+        return Response(
+            {"Transaction history for showroom": serializer_data},
+            status=status.HTTP_200_OK,
+        )
+
+    @action(methods=["get"], detail=True, url_path="customer-details")
     def details_of_transaction(self, request, pk):
         """Return list of customer transactions"""
         customers_transactions = SalesShowroomToCustomer.objects.filter(customer=pk)
