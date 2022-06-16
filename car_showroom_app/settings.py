@@ -36,14 +36,15 @@ INSTALLED_APPS = [
     "customer",
     "dealer",
     "transaction",
+    "users.apps.UsersConfig",
     "rest_framework",
-    "rest_framework",
+    "rest_condition",
+    # "rest_framework.authtoken",
+    "rest_framework_simplejwt",
+    "djoser",
     "debug_toolbar",
     "django_filters",
-    "rest_framework_simplejwt",
     "drf_yasg",
-    "user.apps.UserConfig",
-    "djoser",
 ]
 
 MIDDLEWARE = [
@@ -120,9 +121,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.0/howto/static-files/
-
 STATIC_URL = "static/"
 
 # Default primary key field type
@@ -147,13 +145,14 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
+        # "rest_framework.authentication.TokenAuthentication",
     ),
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 2,
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
@@ -182,7 +181,35 @@ SIMPLE_JWT = {
 DJOSER = {
     "PASSWORD_RESET_CONFIRM_URL": "#/password/reset/confirm/{uid}/{token}",
     "USERNAME_RESET_CONFIRM_URL": "#/username/reset/confirm/{uid}/{token}",
-    "ACTIVATION_URL": "#/activate/{uid}/{token}",
+    "ACTIVATION_URL": "api/showroom_user/activate/{uid}/{token}",
     "SEND_ACTIVATION_EMAIL": True,
-    "SERIALIZERS": {},
+    "SERIALIZERS": {
+        "user_create": "users.serializers.ShowroomUserSerializer",
+        "activation": "djoser.serializers.ActivationSerializer",
+        "user": "djoser.serializers.UserSerializer",
+        "current_user": "djoser.serializers.UserSerializer",
+        "token": "djoser.serializers.TokenSerializer",
+        "token_create": "djoser.serializers.TokenCreateSerializer",
+        "user_create_password_retype": "djoser.serializers.UserCreatePasswordRetypeSerializer",
+        "user_delete": "djoser.serializers.UserDeleteSerializer",
+        "password_reset": "djoser.serializers.SendEmailResetSerializer",
+        "password_reset_confirm": "djoser.serializers.PasswordResetConfirmSerializer",
+        "password_reset_confirm_retype": "djoser.serializers.PasswordResetConfirmRetypeSerializer",
+        "set_password": "djoser.serializers.SetPasswordSerializer",
+        "set_password_retype": "djoser.serializers.SetPasswordRetypeSerializer",
+        "set_username": "djoser.serializers.SetUsernameSerializer",
+        "set_username_retype": "djoser.serializers.SetUsernameRetypeSerializer",
+        "username_reset": "djoser.serializers.SendEmailResetSerializer",
+        "username_reset_confirm": "djoser.serializers.UsernameResetConfirmSerializer",
+        "username_reset_confirm_retype": "djoser.serializers.UsernameResetConfirmRetypeSerializer",
+    },
 }
+
+# smtp
+EMAIL_HOST = environ.get("SMTP_HOST")
+EMAIL_HOST_USER = environ.get("HOST_EMAIL")
+EMAIL_HOST_PASSWORD = environ.get("EMAIL_HOST_PASS")
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+AUTH_USER_MODEL = "users.ShowroomUser"

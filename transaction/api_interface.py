@@ -1,12 +1,15 @@
 from core.common_api_interface.common_api_interface import CustomViewSet
+from core.permissions.permissions import IsCustomerUser, IsDealerUser, IsShowroomUser
 from dealer.models import DiscountDealer
 from dealer.serializers import DiscountDealerSerializer
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from showroom.models import DiscountShowroom
 from showroom.serializers import DiscountShowroomSerializer
 
+from .filters import DealerToShowroomFilter, ShowroomToCustomerFilter
 from .models import SalesDealerToShowroom, SalesShowroomToCustomer
 from .serializers import (
     SalesDealerToShowroomSerializer,
@@ -19,6 +22,8 @@ class TransactionShowroomToCustomerViewSet(CustomViewSet):
 
     queryset = SalesShowroomToCustomer.objects.all()
     serializer_class = SalesShowroomToBuyersSerializer
+    permission_classes = [(IsShowroomUser | IsCustomerUser | IsAdminUser)]
+    filterset_class = ShowroomToCustomerFilter
 
     @action(methods=["get"], detail=False, url_path="history")
     def list_of_transactions(self, request):
@@ -49,6 +54,8 @@ class TransactionShowroomToCustomerViewSet(CustomViewSet):
 class TransactionDealerToShowroomViewSet(CustomViewSet):
     queryset = SalesDealerToShowroom.objects.all()
     serializer_class = SalesShowroomToBuyersSerializer
+    permission_classes = [(IsDealerUser | IsShowroomUser | IsAdminUser)]
+    filterset_class = DealerToShowroomFilter
 
     @action(methods=["get"], detail=False, url_path="history")
     def list_of_transactions(self, request):
@@ -69,3 +76,5 @@ class DiscountViewSet(CustomViewSet):
     """
     A viewset for discounts of showrooms and suppliers
     """
+
+    pass

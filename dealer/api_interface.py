@@ -1,12 +1,18 @@
 from core.common_api_interface.common_api_interface import CustomViewSet
 from core.permissions.permissions import IsDealerUser, IsShowroomUser
+from rest_condition import Or
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter, SearchFilter
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import (
+    AllowAny,
+    IsAdminUser,
+    IsAuthenticated,
+    IsAuthenticatedOrReadOnly,
+)
 from rest_framework.response import Response
 
-from .filters import CarFilter, DealerFilter
+from .filters import DealerFilter
 from .models import Car, Dealer
 from .serializers import CarSerializer, DealerSerializer
 
@@ -20,11 +26,16 @@ class DealerViewSet(CustomViewSet):
     # TODO: add permissions and filter sets
     queryset = Dealer.objects.all()
     serializer_class = DealerSerializer
-    permission_classes = [IsAdminUser, IsDealerUser]
+    permission_classes = [(IsDealerUser | IsAdminUser)]
+    filterset_class = DealerFilter
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ("name",)
 
-    @action(methods=["get"], detail=False, url_path="list")
+    @action(
+        methods=["get"],
+        detail=False,
+        url_path="list",
+    )
     def list_of_dealers(self, request):
         return super(DealerViewSet, self).get(request)
 

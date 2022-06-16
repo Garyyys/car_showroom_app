@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -15,8 +15,10 @@ urlpatterns = [
     path("api/", include("showroom.urls")),
     path("api/", include("dealer.urls")),
     path("api/", include("transaction.urls")),
-    path("api/", include("user.urls")),
-    path(r"^auth/", include("djoser.urls.jwt")),
+    path("api/", include("users.urls")),
+    re_path(r"api/auth/", include("djoser.urls")),
+    # re_path(r"auth/", include("djoser.urls.authtoken")),
+    re_path(r"api/auth/", include("djoser.urls.jwt")),
     path("__debug__/", include("debug_toolbar.urls")),
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),

@@ -6,17 +6,18 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
 
+from .filters import ShowroomFilter
 from .models import Showroom
 from .serializers import MainShowroomSerializer
 
 
 class ShowroomsViewSet(CustomViewSet):
     queryset = Showroom.objects.all()
-    serializer_class = MainShowroomSerializer()
-    permission_classes = [IsAdminUser, IsShowroomUser]
+    serializer_class = MainShowroomSerializer
+    permission_classes = [(IsAdminUser | IsShowroomUser)]
+    filterset_class = ShowroomFilter
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ("name",)
-    # filterset_class = ShowroomFilter
 
     @action(methods=["get"], detail=False, url_path="list")
     def list_of_showrooms(self, request):
