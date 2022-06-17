@@ -80,7 +80,9 @@ class DiscountDealer(DateAddedUpdated, Discount):
     dealer = models.ForeignKey(
         "Dealer", on_delete=models.PROTECT, related_name="dealer_discount", null=True
     )
-    dealer_car_on_sale = models.ForeignKey(Car, on_delete=models.PROTECT, null=True)
+    dealer_car_on_sale = models.ForeignKey(
+        Car, on_delete=models.PROTECT, verbose_name="car", null=True
+    )
 
     class Meta:
         db_table = "dealer_discount"
