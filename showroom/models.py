@@ -14,7 +14,7 @@ class Showroom(DateAddedUpdated, Information):
             "model": "q7",
             "color": "red",
             "year": "2010",
-            "engine": 7.0,
+            "engine": 3.0,
             "body_type": "sedan",
         },
     )
@@ -23,7 +23,7 @@ class Showroom(DateAddedUpdated, Information):
         db_table = "showroom"
 
     def __str__(self):
-        template = "{0.name} {0.country} {0.email} {0.is_available}"
+        template = "{0.name} {0.country} {0.email} {0.is_active}"
         return template.format(self)
 
 
@@ -48,7 +48,7 @@ class DiscountShowroom(DateAddedUpdated, Discount):
 
     def __str__(self):
         template = (
-            "{0.id_showroom} {0.start_time} {0.end_time} {0.id_car}"
-            "{0.amount_of_discount} {0.is_available}"
+            "{0.showrooms_discount} {0.start_time} {0.end_time} {0.discount_showroom_for_car}"
+            "{0.amount_of_discount} {0.is_active}"
         )
         return template.format(self)

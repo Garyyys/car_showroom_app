@@ -1,6 +1,5 @@
 import os
 
-from core.celery_tasks import tasks
 
 from celery import Celery
 from celery.schedules import crontab
@@ -16,8 +15,12 @@ app.conf.beat_schedule = {
         "task": "core.celery_tasks.tasks.sample_task",
         "schedule": crontab(minute="*/10"),
     },
-    # "buy_car": {
-    #     "task": "core.celery_tasks.tasks.showroom_buy_cars",
-    #     "schedule": crontab(minute="*/1"),
-    # },
+    "showroom_buy_car": {
+        "task": "dealer.tasks.showroom_buy_cars",
+        "schedule": crontab(minute="*/1"),
+    },
+    "customer_buy_car": {
+        "task": "showroom.tasks.customer_buy_car",
+        "schedule": crontab(minute="*/1"),
+    },
 }

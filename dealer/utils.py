@@ -4,7 +4,7 @@ class DiscountRanks:
     - Values dicosunt representation name
     """
 
-    REGULAR = 0
+    REGULAR = 1
     BRONZE = 5
     SILVER = 7
     GOLD = 10
