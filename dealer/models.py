@@ -102,6 +102,10 @@ class DiscountDealer(models.Model):
         db_table = "dealer_discount"
         unique_together = ["showroom", "dealer"]
 
+    def __str__(self):
+        template = "{0.discount} {0.bought_cars} {0.showroom}" "{0.dealer}"
+        return template.format(self)
+
 
 class LoyaltyProgram(models.Model):
     """
