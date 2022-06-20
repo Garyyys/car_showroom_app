@@ -14,6 +14,10 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     "celery_task": {
         "task": "core.celery_tasks.tasks.sample_task",
-        "schedule": crontab(minute="*/1"),
-    }
+        "schedule": crontab(minute="*/10"),
+    },
+    # "buy_car": {
+    #     "task": "core.celery_tasks.tasks.showroom_buy_cars",
+    #     "schedule": crontab(minute="*/1"),
+    # },
 }

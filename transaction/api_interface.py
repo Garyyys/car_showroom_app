@@ -1,6 +1,5 @@
 from core.common_api_interface.common_api_interface import CustomViewSet
-from core.permissions.permissions import (IsCustomerUser, IsDealerUser,
-                                          IsShowroomUser)
+from core.permissions.permissions import IsCustomerUser, IsDealerUser, IsShowroomUser
 from dealer.models import DiscountDealer
 from dealer.serializers import DiscountDealerSerializer
 from rest_framework import status
@@ -12,8 +11,10 @@ from showroom.serializers import DiscountShowroomSerializer
 
 from .filters import DealerToShowroomFilter, ShowroomToCustomerFilter
 from .models import SalesDealerToShowroom, SalesShowroomToCustomer
-from .serializers import (SalesDealerToShowroomSerializer,
-                          SalesShowroomToBuyersSerializer)
+from .serializers import (
+    SalesDealerToShowroomSerializer,
+    SalesShowroomToBuyersSerializer,
+)
 
 
 class TransactionShowroomToCustomerViewSet(CustomViewSet):

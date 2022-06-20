@@ -217,7 +217,6 @@ REDIS_PORT = environ.get("REDIS_PORT", 6379)
 # celery
 CELERY_BROKER_URL = environ.get("CELERY_BROKER", "redis://localhost:6379/0")
 CELERY_RESULT_BACKEND = environ.get("RESULT_BACKEND", "redis://redis:6379")
-
 CELERY_BROKER_TRANSPORT_OPTIONS = {
     "visibility_timeout": 18000,
     "max_retries": 2,

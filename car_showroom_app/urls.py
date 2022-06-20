@@ -1,11 +1,8 @@
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, re_path
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-    TokenVerifyView,
-)
+from rest_framework_simplejwt.views import (TokenObtainPairView,
+                                            TokenRefreshView, TokenVerifyView)
 
 from .yasg import urlpatterns as doc_urls
 
