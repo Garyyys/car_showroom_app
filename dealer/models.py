@@ -76,6 +76,7 @@ class Car(DateUpdatedAdded):
         return template.format(self)
 
 
+
 class DiscountDealer(models.Model):
     """
     Discounts Dealer - ShowRoom

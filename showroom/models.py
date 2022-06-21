@@ -34,6 +34,7 @@ class DiscountShowroom(DateAddedUpdated, Discount):
         related_name="showroom_with_discount",
         null=True,
         verbose_name="showroom",
+
     )
     discount_showroom_for_car = models.ForeignKey(
         "dealer.Car",
