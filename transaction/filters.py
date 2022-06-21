@@ -1,5 +1,6 @@
 from django_filters import rest_framework as filters
-from .models import SalesShowroomToCustomer, SalesDealerToShowroom
+
+from .models import SalesDealerToShowroom, SalesShowroomToCustomer
 
 
 class SalesShowroomToCustomerFilter(filters.FilterSet):
@@ -7,7 +8,9 @@ class SalesShowroomToCustomerFilter(filters.FilterSet):
     id_showroom = filters.NumberFilter(field_name="id_showroom", lookup_expr="exact")
     id_car = filters.NumberFilter(field_name="id_car", lookup_expr="exact")
     price = filters.NumberFilter(field_name="price", lookup_expr="exact")
-    amount_of_discount = filters.NumberFilter(field_name="amount_of_discount", lookup_expr="exact")
+    amount_of_discount = filters.NumberFilter(
+        field_name="amount_of_discount", lookup_expr="exact"
+    )
     added_date = filters.DateFilter(field_name="added_date", lookup_expr="exact")
 
     class Meta:
@@ -27,7 +30,9 @@ class SalesDealerToShowroomFilter(filters.FilterSet):
     id_showroom = filters.NumberFilter(field_name="id_showroom", lookup_expr="exact")
     id_car = filters.NumberFilter(field_name="id_car", lookup_expr="exact")
     price = filters.NumberFilter(field_name="price", lookup_expr="exact")
-    amount_of_discount = filters.NumberFilter(field_name="amount_of_discount", lookup_expr="exact")
+    amount_of_discount = filters.NumberFilter(
+        field_name="amount_of_discount", lookup_expr="exact"
+    )
     added_date = filters.DateFilter(field_name="added_date", lookup_expr="exact")
 
     class Meta:

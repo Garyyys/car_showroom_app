@@ -1,5 +1,4 @@
-from rest_framework import status
-from rest_framework import viewsets
+from rest_framework import status, viewsets
 from rest_framework.response import Response
 
 
@@ -10,12 +9,14 @@ class CustomViewSet(viewsets.GenericViewSet):
         page = self.paginate_queryset(self.filter_queryset(self.queryset))
         if page is not None:
             serializer = self.serializer_class(page, many=True)
-            return Response(self.get_paginated_response(serializer.data), status=status.HTTP_200_OK)
+            return Response(
+                self.get_paginated_response(serializer.data), status=status.HTTP_200_OK
+            )
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
 
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -38,7 +39,7 @@ class CustomViewSet(viewsets.GenericViewSet):
 
     @property
     def paginator(self):
-        if not hasattr(self, '_paginator'):
+        if not hasattr(self, "_paginator"):
             if self.pagination_class is None:
                 self._paginator = None
             else:
@@ -53,4 +54,3 @@ class CustomViewSet(viewsets.GenericViewSet):
     def get_paginated_response(self, data):
         assert self.paginator is not None
         return self.paginator.get_paginated_response(data)
-

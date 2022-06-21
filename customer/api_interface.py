@@ -1,45 +1,40 @@
+from core.common_api_interface.common_api_interface import CustomViewSet
+from rest_framework import permissions, status, views
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework import viewsets, permissions, views
-from rest_framework.decorators import action, permission_classes
-from rest_framework import status
-from .models import CustomerOrder, Customer
+
+from .models import Customer, CustomerOrder
 from .serializers import CustomerOrderSerializer, CustomerSerializer
-from .filters import CustomerFilter
 
 
-class CustomerViewSet(viewsets.ModelViewSet):
-    """
-       A viewset for information about customers and theirs orders
-    """
-
-    queryset = CustomerOrder.objects.all()
-    permission_classes = [permissions.AllowAny]
-    serializer_class = CustomerOrderSerializer
-    filterset_class = CustomerFilter
-
-
-@permission_classes([permissions.AllowAny, ])
+@permission_classes([permissions.AllowAny])
 class CustomerListAPIView(views.APIView):
+    queryset = Customer.objects.all()
 
-    def get(self, request):
+    @action(methods=["get"], detail=False, url_path="list")
+    def get(self, request, **kwargs):
         queryset = Customer.objects.all()
-        return Response({'posts': CustomerSerializer(queryset, many=True).data})
+        customers = CustomerSerializer(queryset, many=True)
+        data = customers.data
+        return Response({"Customers": data}, status=status.HTTP_200_OK)
 
     def post(self, request):
         serializer = CustomerSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         post_new = Customer.objects.create(
-            name=request.data['name'],
-            email=request.data['email'],
-            balance=request.data['balance'],
-            country=request.data['country'],
-            age=request.data['age'],
-            sex=request.data['sex'],
-            driver_licence=request.data['driver_licence']
+            name=request.data["name"],
+            email=request.data["email"],
+            balance=request.data["balance"],
+            country=request.data["country"],
+            age=request.data["age"],
+            sex=request.data["sex"],
+            driver_licence=request.data["driver_licence"],
         )
 
-        return Response({'post': CustomerSerializer(post_new).data})
+        data = CustomerSerializer(post_new).data
+
+        return Response(data={"post": data}, status=status.HTTP_201_CREATED)
 
     def put(self, request, *args, **kwargs):
         pk = kwargs.get("pk", None)
@@ -51,12 +46,15 @@ class CustomerListAPIView(views.APIView):
             instance = Customer.objects.get(pk=pk)
 
         except:
-            return Response({"error": "Object doesn't exist"})
+            return Response(
+                {"error": "Object doesn't exist"},
+                status=status.HTTP_204_NO_CONTENT,
+            )
 
         serializer = CustomerSerializer(data=request.data, instance=instance)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({"post": serializer.data})
+        return Response({"post": serializer.data}, status=status.HTTP_200_OK)
 
     def delete(self, request, *args, **kwargs):
         pk = kwargs.get("pk", None)
@@ -66,4 +64,16 @@ class CustomerListAPIView(views.APIView):
         customer = Customer.objects.get(pk=pk)
         customer.delete()
 
-        return Response({"post": "delete post " + str(pk)})
+        return Response({"post": "delete post " + str(pk)}, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+def get_details(request, pk):
+    customer = Customer.objects.get(pk=pk)
+    customer_data = CustomerSerializer(customer).data
+    return Response({"Customer details": customer_data}, status=status.HTTP_200_OK)
+
+
+class CustomerOrderViewSet(CustomViewSet):
+    queryset = CustomerOrder.objects.all()
+    serializer_class = CustomerOrderSerializer
