@@ -1,12 +1,15 @@
 from core.common_api_interface.common_api_interface import CustomViewSet
+from core.permissions.permissions import IsCustomerUser, IsDealerUser, IsShowroomUser
 from dealer.models import DiscountDealer
 from dealer.serializers import DiscountDealerSerializer
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from showroom.models import DiscountShowroom
 from showroom.serializers import DiscountShowroomSerializer
 
+from .filters import DealerToShowroomFilter, ShowroomToCustomerFilter
 from .models import SalesDealerToShowroom, SalesShowroomToCustomer
 from .serializers import (
     SalesDealerToShowroomSerializer,
@@ -19,17 +22,26 @@ class TransactionShowroomToCustomerViewSet(CustomViewSet):
 
     queryset = SalesShowroomToCustomer.objects.all()
     serializer_class = SalesShowroomToBuyersSerializer
+    permission_classes = [(IsShowroomUser | IsCustomerUser | IsAdminUser)]
+    filterset_class = ShowroomToCustomerFilter
 
     @action(methods=["get"], detail=False, url_path="history")
     def list_of_transactions(self, request):
         """Return transactions list from Showroom to customers"""
-        transactions = SalesShowroomToCustomer.objects.all()
-        data = SalesShowroomToBuyersSerializer(transactions, many=True).data
+        return super(TransactionShowroomToCustomerViewSet, self).get(request)
+
+    @action(methods=["get"], detail=True, url_path="showroom-details")
+    def showroom_to_customer_transaction_history(self, request, pk):
+        showroom_transaction = SalesShowroomToCustomer.objects.filter(showroom=pk)
+        serializer_data = SalesShowroomToBuyersSerializer(
+            showroom_transaction, many=True
+        ).data
         return Response(
-            {"All showrooms transactions history": data}, status=status.HTTP_200_OK
+            {"Transaction history for showroom": serializer_data},
+            status=status.HTTP_200_OK,
         )
 
-    @action(methods=["get"], detail=True, url_path="details")
+    @action(methods=["get"], detail=True, url_path="customer-details")
     def details_of_transaction(self, request, pk):
         """Return list of customer transactions"""
         customers_transactions = SalesShowroomToCustomer.objects.filter(customer=pk)
@@ -41,14 +53,14 @@ class TransactionShowroomToCustomerViewSet(CustomViewSet):
 
 class TransactionDealerToShowroomViewSet(CustomViewSet):
     queryset = SalesDealerToShowroom.objects.all()
-    serializer_class = SalesShowroomToBuyersSerializer()
+    serializer_class = SalesShowroomToBuyersSerializer
+    permission_classes = [(IsDealerUser | IsShowroomUser | IsAdminUser)]
+    filterset_class = DealerToShowroomFilter
 
     @action(methods=["get"], detail=False, url_path="history")
     def list_of_transactions(self, request):
         """Return transactions list from Dealer to Showroom"""
-        transactions = SalesDealerToShowroom.objects.all()
-        data = SalesDealerToShowroomSerializer(transactions, many=True).data
-        return Response({"All dealers transactions": data})
+        return super(TransactionDealerToShowroomViewSet, self).get(request)
 
     @action(methods=["get"], detail=True, url_path="details")
     def details_of_transaction(self, request, pk):
@@ -65,17 +77,4 @@ class DiscountViewSet(CustomViewSet):
     A viewset for discounts of showrooms and suppliers
     """
 
-    def list(self, request, *args):
-        discounts_showrooms = DiscountShowroom.objects.all()
-        discounts_dealer = DiscountDealer.objects.all()
-        serializer_discounts_showrooms = DiscountShowroomSerializer(
-            discounts_showrooms, many=True
-        )
-        serializer_discounts_dealer = DiscountDealerSerializer(
-            discounts_dealer, many=True
-        )
-        serializer_dict = {
-            "discounts_showrooms": serializer_discounts_showrooms.data,
-            "discounts_dealer": serializer_discounts_dealer.data,
-        }
-        return Response(serializer_dict, status=status.HTTP_200_OK)
+    pass

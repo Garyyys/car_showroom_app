@@ -12,7 +12,7 @@ class ShowroomAdmin(admin.ModelAdmin):
     list_filter = (
         "name",
         "country",
-        "is_available",
+        "is_active",
     )
 
 
@@ -26,7 +26,7 @@ class DiscountShowroomsAdmin(admin.ModelAdmin):
         "start_time",
         "end_time",
         "amount_of_discount",
-        "is_available",
+        "is_active",
         "added_date",
         "date_updated",
     )

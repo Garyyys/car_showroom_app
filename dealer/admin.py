@@ -14,7 +14,7 @@ class DealerAdmin(admin.ModelAdmin):
         "name",
         "country",
         "number_of_buyers",
-        "is_available",
+        "is_active",
         "added_date",
         "date_updated",
     )
@@ -51,7 +51,7 @@ class DiscountDealerAdmin(admin.ModelAdmin):
         "start_time",
         "end_time",
         "amount_of_discount",
-        "is_available",
+        "is_active",
         "added_date",
         "date_updated",
     )

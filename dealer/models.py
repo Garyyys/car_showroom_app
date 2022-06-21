@@ -11,6 +11,9 @@ class Dealer(DateAddedUpdated, Information):
     description = models.TextField(null=True)
     number_of_buyers = models.PositiveIntegerField(default=0)
 
+    class Meta:
+        db_table = "dealer"
+
     def __str__(self):
         template = (
             "{0.name} {0.country} {0.email}" "{0.number_of_buyers} {0.is_available}"
@@ -61,6 +64,9 @@ class Car(DateUpdatedAdded):
         related_name="customers_cars",
     )
 
+    class Meta:
+        db_table = "car"
+
     def __str__(self):
         template = (
             "{0.make} {0.model} {0.color} {0.year} {0.engine}"
@@ -74,9 +80,10 @@ class DiscountDealer(DateAddedUpdated, Discount):
     dealer = models.ForeignKey(
         "Dealer", on_delete=models.PROTECT, related_name="dealer_discount", null=True
     )
-    dealer_car = models.ForeignKey(
-        Car, on_delete=models.PROTECT, related_name="dealer_car", null=True
-    )
+    dealer_car_on_sale = models.ForeignKey(Car, on_delete=models.PROTECT, null=True)
+
+    class Meta:
+        db_table = "dealer_discount"
 
     def __str__(self):
         template = (
