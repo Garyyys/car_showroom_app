@@ -33,6 +33,8 @@ services:
 
   celery:
     container_name: celery
+    volumes:
+      - ./:/app/
     build:
       context: .
       dockerfile: Dockerfile.tasks
@@ -46,6 +48,8 @@ services:
 
   tasks_beat:
     container_name: tasks_beat
+    volumes:
+      - ./:/app/
     build:
       context: .
       dockerfile: Dockerfile.tasks

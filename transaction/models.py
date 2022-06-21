@@ -22,7 +22,7 @@ class SalesShowroomToCustomer(DateAdded, models.Model):
     )
     price = DecimalRangeField(max_digits=20, decimal_places=2, min_value=0.00)
     amount_of_discount = models.IntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(30)]
+        validators=[MinValueValidator(0), MaxValueValidator(30)], null=True
     )
 
     class Meta:

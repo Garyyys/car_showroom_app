@@ -24,8 +24,17 @@ class CustomerOrder(DateAddedUpdated):
     customer = models.ForeignKey(
         Customer, on_delete=models.PROTECT, related_name="customer_orders", null=True
     )
-    car = models.ForeignKey(
-        "dealer.Car", on_delete=models.PROTECT, related_name="ordered_car", null=True
+    desired_car = models.JSONField(
+        encoder=None,
+        decoder=None,
+        default={
+            "make": "audi",
+            "model": "q7",
+            "color": "red",
+            "year": "2010",
+            "engine": 3.0,
+            "body_type": "sedan",
+        },
     )
     price = DecimalRangeField(max_digits=20, decimal_places=2, min_value=0.00)
 
@@ -33,5 +42,5 @@ class CustomerOrder(DateAddedUpdated):
         db_table = "customer_order"
 
     def __str__(self):
-        template = "{0.customer} {0.car} {0.price} {0.is_available}"
+        template = "{0.customer} {0.desired_car} {0.price} {0.is_active}"
         return template.format(self)
