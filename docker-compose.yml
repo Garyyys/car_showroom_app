@@ -24,6 +24,38 @@ services:
     ports:
       - '8081:8081'
 
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - '127.0.0.1:6379:6379'
+    restart: unless-stopped
+
+  celery:
+    container_name: celery
+    build:
+      context: .
+      dockerfile: Dockerfile.tasks
+    command: celery -A car_showroom_app worker -l INFO
+    env_file: .env.app
+    depends_on:
+      - django_server
+      - database
+      - redis
+    restart: unless-stopped
+
+  tasks_beat:
+    container_name: tasks_beat
+    build:
+      context: .
+      dockerfile: Dockerfile.tasks
+    command: celery -A car_showroom_app beat -l info -s "/tmp/celerybeat-schedule"
+    env_file: .env.app
+    depends_on:
+      - django_server
+      - database
+      - redis
+    restart: unless-stopped
 
 volumes:
   pg_data:

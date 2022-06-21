@@ -16,11 +16,7 @@ SECRET_KEY = environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = environ.get("DEBUG", False)
 
-ALLOWED_HOSTS = [
-    "0.0.0.0",
-    "localhost",
-    "127.0.0.1",
-]
+ALLOWED_HOSTS = ["0.0.0.0", "localhost", "127.0.0.1", "192.168.31.86"]
 
 # Application definition
 
@@ -213,3 +209,18 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 AUTH_USER_MODEL = "users.ShowroomUser"
+
+# redis
+REDIS_HOST = environ.get("REDIS_HOST", "localhost")
+REDIS_PORT = environ.get("REDIS_PORT", 6379)
+
+# celery
+CELERY_BROKER_URL = environ.get("CELERY_BROKER", "redis://localhost:6379/0")
+CELERY_RESULT_BACKEND = environ.get("RESULT_BACKEND", "redis://redis:6379")
+CELERY_BROKER_TRANSPORT_OPTIONS = {
+    "visibility_timeout": 18000,
+    "max_retries": 2,
+}
+CELERY_TIMEZONE = "UTC"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60

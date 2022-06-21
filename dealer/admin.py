@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Car, Dealer, DiscountDealer
+from .models import Car, Dealer, DiscountDealer, LoyaltyProgram
 
 
 @admin.register(Dealer)
@@ -36,22 +36,17 @@ class CarAdmin(admin.ModelAdmin):
     )
 
 
-# @admin.register(DealerCarForSale)
-# class DealerCarsForSaleAdmin(admin.ModelAdmin):
-#     pass
-
-
 @admin.register(DiscountDealer)
 class DiscountDealerAdmin(admin.ModelAdmin):
-    readonly_fields = (
-        "added_date",
-        "date_updated",
-    )
     list_filter = (
-        "start_time",
-        "end_time",
-        "amount_of_discount",
-        "is_active",
-        "added_date",
-        "date_updated",
+        "discount",
+        "bought_cars",
+        "showroom",
+        "dealer",
     )
+
+
+@admin.register(LoyaltyProgram)
+class DealerLoyaltyProgram(admin.ModelAdmin):
+    readonly_fields = ("updated_at", "created_at")
+    list_filter = ("dealer", "program", "min_bought_cars", "is_active")

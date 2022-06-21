@@ -5,6 +5,8 @@ from core.filters_models.decimal_range_field import DecimalRangeField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+from dealer.utils import DiscountRanks
+
 
 class Dealer(DateAddedUpdated, Information):
     found_year = models.DateField()
@@ -15,9 +17,7 @@ class Dealer(DateAddedUpdated, Information):
         db_table = "dealer"
 
     def __str__(self):
-        template = (
-            "{0.name} {0.country} {0.email}" "{0.number_of_buyers} {0.is_available}"
-        )
+        template = "{0.name} {0.country} {0.email}" "{0.number_of_buyers} {0.is_active}"
         return template.format(self)
 
 
@@ -76,18 +76,65 @@ class Car(DateUpdatedAdded):
         return template.format(self)
 
 
-class DiscountDealer(DateAddedUpdated, Discount):
-    dealer = models.ForeignKey(
-        "Dealer", on_delete=models.PROTECT, related_name="dealer_discount", null=True
+
+class DiscountDealer(models.Model):
+    """
+    Discounts Dealer - ShowRoom
+    """
+
+    discount = models.IntegerField(
+        choices=DiscountRanks.DISCOUNT_CHOICES, default=DiscountRanks.REGULAR
     )
-    dealer_car_on_sale = models.ForeignKey(Car, on_delete=models.PROTECT, null=True)
+    bought_cars = models.PositiveIntegerField(default=0)
+    showroom = models.ForeignKey(
+        "showroom.Showroom",
+        related_name="showroom_discounts",
+        on_delete=models.CASCADE,
+        null=True,
+    )
+    dealer = models.ForeignKey(
+        "dealer.Dealer",
+        related_name="dealer_discounts",
+        on_delete=models.CASCADE,
+        null=True,
+    )
 
     class Meta:
         db_table = "dealer_discount"
+        unique_together = ["showroom", "dealer"]
 
     def __str__(self):
-        template = (
-            "{0.dealer} {0.start_time} {0.end_time} {0.dealer_car}"
-            "{0.amount_of_discount} {0.is_available}"
-        )
+        template = "{0.discount} {0.bought_cars} {0.showroom}" "{0.dealer}"
         return template.format(self)
+
+
+class LoyaltyProgram(models.Model):
+    """
+    Loyalty program is unique for every dealer
+    and discount by number of bought cars
+    is different.
+
+    min_bought_cars: minimum value for achieve this particular program.
+
+    DealerDiscount.discount updates depends on LoyaltyProgram
+    """
+
+    dealer = models.ForeignKey(
+        "dealer.Dealer", related_name="dealer_loyalties", on_delete=models.CASCADE
+    )
+    program = models.IntegerField(
+        choices=DiscountRanks.DISCOUNT_CHOICES, default=DiscountRanks.REGULAR
+    )
+    min_bought_cars = models.PositiveIntegerField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ["dealer", "program"]
+
+    def __str__(self):
+        if self.dealer:
+            return f"{self.dealer} - {self.program}"
+        return "New Loyalty Program"

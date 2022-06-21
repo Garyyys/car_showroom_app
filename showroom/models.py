@@ -33,12 +33,15 @@ class DiscountShowroom(DateAddedUpdated, Discount):
         on_delete=models.PROTECT,
         related_name="showroom_with_discount",
         null=True,
+        verbose_name="showroom",
+
     )
     discount_showroom_for_car = models.ForeignKey(
         "dealer.Car",
         on_delete=models.PROTECT,
         related_name="showroom_car_on_sale",
         null=True,
+        verbose_name="car",
     )
 
     class Meta:
