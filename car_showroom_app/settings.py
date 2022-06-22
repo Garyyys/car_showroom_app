@@ -118,6 +118,7 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = "static/"
+STATIC_ROOT = "/etc/staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -224,3 +225,7 @@ CELERY_BROKER_TRANSPORT_OPTIONS = {
 CELERY_TIMEZONE = "UTC"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
+# for nginx
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:1337",
+]

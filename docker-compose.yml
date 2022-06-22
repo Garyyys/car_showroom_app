@@ -7,22 +7,35 @@ services:
     env_file: .env.db
     volumes:
       - pg_data:/var/lib/posgresql/data
-    ports:
-      - '5433:5432'
+    expose:
+      - 5432
     restart: unless-stopped
 
   django_server:
     build:
       context: .
       dockerfile: Dockerfile
-    command: python manage.py runserver 0.0.0.0:8081
+    command: "gunicorn -c gunicorn.py car_showroom_app.wsgi"
     env_file: .env.app
     tty: true
     stdin_open: true
     volumes:
       - ./:/app/
+      - static_volume:/etc/staticfiles
+    expose:
+      - 8000
+
+  nginx:
+    build: ./nginx
+    depends_on:
+      - django_server
     ports:
-      - '8081:8081'
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx:/app/nginx/conf.d
+      - static_volume:/etc/staticfiles
+
 
   redis:
     image: redis:latest
@@ -61,7 +74,8 @@ services:
       - redis
     restart: unless-stopped
 
-
 volumes:
+  static_volume:
+    driver: local
   pg_data:
     driver: local
