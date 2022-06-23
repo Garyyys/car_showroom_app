@@ -1,11 +1,13 @@
+"""Models for Customer"""
+
 from core.abstractmodels.common_info import Information
-from core.abstractmodels.date_fields import DateAddedUpdated, DateUpdatedAdded
+from core.abstractmodels.date_fields import DateAddedUpdated
 from core.filters_models.decimal_range_field import DecimalRangeField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 
-class Customer(DateUpdatedAdded, Information):
+class Customer(DateAddedUpdated, Information):
     age = models.IntegerField(
         validators=[MinValueValidator(14), MaxValueValidator(150)]
     )

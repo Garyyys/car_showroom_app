@@ -1,20 +1,13 @@
 from core.common_api_interface.common_api_interface import CustomViewSet
 from core.permissions.permissions import IsCustomerUser, IsDealerUser, IsShowroomUser
-from dealer.models import DiscountDealer
-from dealer.serializers import DiscountDealerSerializer
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
-from showroom.models import DiscountShowroom
-from showroom.serializers import DiscountShowroomSerializer
 
 from .filters import DealerToShowroomFilter, ShowroomToCustomerFilter
 from .models import SalesDealerToShowroom, SalesShowroomToCustomer
-from .serializers import (
-    SalesDealerToShowroomSerializer,
-    SalesShowroomToBuyersSerializer,
-)
+from .serializers import SalesShowroomToBuyersSerializer
 
 
 class TransactionShowroomToCustomerViewSet(CustomViewSet):
@@ -70,11 +63,3 @@ class TransactionDealerToShowroomViewSet(CustomViewSet):
         return Response(
             {"Transaction history to dealer": data}, status=status.HTTP_200_OK
         )
-
-
-class DiscountViewSet(CustomViewSet):
-    """
-    A viewset for discounts of showrooms and suppliers
-    """
-
-    pass

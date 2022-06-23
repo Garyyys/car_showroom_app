@@ -1,6 +1,8 @@
+"""Registered Customer models"""
+
 from django.contrib import admin
 
-from .models import *
+from customer.models import Customer, CustomerOrder
 
 
 @admin.register(Customer)

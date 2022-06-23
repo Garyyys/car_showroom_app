@@ -3,6 +3,8 @@ from rest_framework.response import Response
 
 
 class CustomViewSet(viewsets.GenericViewSet):
+    """base viewset for all viesets except Customer"""
+
     search_fields = None
 
     def get(self, request):

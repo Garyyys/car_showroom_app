@@ -1,5 +1,5 @@
 from core.abstractmodels.common_info import Information
-from core.abstractmodels.date_fields import DateAddedUpdated, DateUpdatedAdded
+from core.abstractmodels.date_fields import DateAddedUpdated
 from core.abstractmodels.discount import Discount
 from core.filters_models.decimal_range_field import DecimalRangeField
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -21,7 +21,7 @@ class Dealer(DateAddedUpdated, Information):
         return template.format(self)
 
 
-class Car(DateUpdatedAdded):
+class Car(DateAddedUpdated):
     CHOICES = (
         ("SEDAN", "Седан"),
         ("COUPE", "Купе"),
@@ -77,13 +77,10 @@ class Car(DateUpdatedAdded):
 
 
 class DiscountDealer(models.Model):
-    """
-    Discounts Dealer - ShowRoom
-    """
-
     discount = models.IntegerField(
         choices=DiscountRanks.DISCOUNT_CHOICES, default=DiscountRanks.REGULAR
     )
+    # count of bought cars
     bought_cars = models.PositiveIntegerField(default=0)
     showroom = models.ForeignKey(
         "showroom.Showroom",
@@ -116,6 +113,7 @@ class LoyaltyProgram(models.Model):
     min_bought_cars: minimum value for achieve this particular program.
 
     DealerDiscount.discount updates depends on LoyaltyProgram
+    For each new dealer need create 5 instances for each level of loyalty program
     """
 
     dealer = models.ForeignKey(

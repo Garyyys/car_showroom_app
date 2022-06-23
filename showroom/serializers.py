@@ -1,4 +1,3 @@
-from customer.models import Customer
 from customer.serializers import CustomerShortInfoSerializer
 from dealer.models import Car
 from django.db.models import Count, F
@@ -9,8 +8,6 @@ from showroom.models import DiscountShowroom, Showroom
 
 
 class ShowroomsCarsSerializer(serializers.ModelSerializer):
-    # TODO: add uniquebuyers field
-    # TODO: add separate serializer for count value of transactions for buyers
     total_models = serializers.IntegerField()
 
     class Meta:

@@ -1,6 +1,6 @@
 from core.common_api_interface.common_api_interface import CustomViewSet
 from core.permissions.permissions import IsShowroomUser
-from rest_framework import permissions, status
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import AllowAny, IsAdminUser

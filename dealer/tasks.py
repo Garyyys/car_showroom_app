@@ -13,13 +13,6 @@ logger = get_task_logger(__name__)
 
 @shared_task
 def showroom_buy_cars():
-    # """
-    # :param showroom: Showroom model Instance
-    # :param showroom_preference: Showroom preferences
-    # :param car_dealer_search: Complex filter for finding cars at the dealer
-    # :param dealer_cars: Filtered cars
-    # :param dealer_car: Dealers model car instance
-    # """
     for showroom in Showroom.objects.all():
         showroom_preference = showroom.specification
 

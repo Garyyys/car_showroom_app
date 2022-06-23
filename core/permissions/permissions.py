@@ -1,3 +1,5 @@
+"""There are permissions classes for 3 groups of users"""
+
 from rest_framework import permissions
 from rest_framework.permissions import SAFE_METHODS
 

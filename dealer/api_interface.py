@@ -1,20 +1,14 @@
 from core.common_api_interface.common_api_interface import CustomViewSet
-from core.permissions.permissions import IsDealerUser, IsShowroomUser
-from rest_condition import Or
-from rest_framework import permissions, status, viewsets
+from core.permissions.permissions import IsDealerUser
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter, SearchFilter
-from rest_framework.permissions import (
-    AllowAny,
-    IsAdminUser,
-    IsAuthenticated,
-    IsAuthenticatedOrReadOnly,
-)
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
-from .filters import DealerFilter
-from .models import Car, Dealer
-from .serializers import CarSerializer, DealerSerializer
+from dealer.filters import DealerFilter
+from dealer.models import Dealer
+from dealer.serializers import DealerSerializer
 
 
 # TODO: make permissions

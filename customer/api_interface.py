@@ -1,7 +1,9 @@
+"""Application interface for Customers"""
+
 from core.common_api_interface.common_api_interface import CustomViewSet
 from core.permissions.permissions import IsCustomerUser
 from rest_framework import permissions, status, views
-from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
@@ -68,7 +70,7 @@ class CustomerListAPIView(views.APIView):
         return Response({"post": "delete post " + str(pk)}, status=status.HTTP_200_OK)
 
 
-@permission_classes([permissions.IsAdminUser, IsCustomerUser])
+@permission_classes([(permissions.IsAdminUser | IsCustomerUser)])
 @api_view(["GET"])
 def get_details(request, pk):
     customer = Customer.objects.get(pk=pk)
@@ -78,4 +80,58 @@ def get_details(request, pk):
 
 class CustomerOrderViewSet(CustomViewSet):
     queryset = CustomerOrder.objects.all()
-    serializer_class = CustomerOrderSerializer
+    permission_classes = [(IsAdminUser | IsCustomerUser)]
+
+    def post(self, request):
+        serializer = CustomerOrderSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        post_new = Customer.objects.create(
+            is_active=request.data["is_active"],
+            desired_car=request.data["desired_car"],
+            price=request.data["price"],
+        )
+
+        data = CustomerOrderSerializer(post_new).data
+
+        return Response(data={"post": data}, status=status.HTTP_201_CREATED)
+
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get("pk", None)
+
+        if not pk:
+            return Response({"error": "Method PUT is not allowed"})
+
+        try:
+            instance = CustomerOrder.objects.get(pk=pk)
+
+        except:
+            return Response(
+                {"error": "Object doesn't exist"},
+                status=status.HTTP_204_NO_CONTENT,
+            )
+
+        customer_order_data = CustomerOrderSerializer(
+            data=request.data, instance=instance
+        )
+        customer_order_data.is_valid(raise_exception=True)
+        customer_order_data.save()
+        return Response({"post": customer_order_data.data}, status=status.HTTP_200_OK)
+
+    def delete(self, request, *args, **kwargs):
+        pk = kwargs.get("pk", None)
+        if not pk:
+            return Response({"error": "Method DELETE not allowed"})
+
+        customer = Customer.objects.get(pk=pk)
+        customer.delete()
+
+        return Response({"post": "delete post " + str(pk)}, status=status.HTTP_200_OK)
+
+
+@permission_classes([(permissions.IsAdminUser | IsCustomerUser)])
+@api_view(["GET"])
+def get_orders(request, pk):
+    customer_order = CustomerOrder.objects.filter(customer=pk)
+    customer_order_data = CustomerOrderSerializer(customer_order).data
+    return Response({"Customer orders": customer_order_data}, status=status.HTTP_200_OK)
